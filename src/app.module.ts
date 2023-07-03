@@ -3,22 +3,23 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AgentService } from './app.service';
 import { FileSystemAgentSecureStorage, FileSystemStorage } from './storage';
-import { WACIProtocolUtils } from './waci-protocol-utils';
+import { WACIProtocolService } from './waci-protocol-utils';
 
 @Module({
   imports: [],
   controllers: [AppController],
   providers: [
     AgentService,
+    WACIProtocolService,
     {
       provide: Agent,
-      useFactory: async () => {
+      useFactory: async (wps: WACIProtocolService) => {
         const agent = new Agent({
           agentStorage: new FileSystemStorage({ filepath: "aduana-storage.json" }),
           didDocumentRegistry: new AgentModenaUniversalRegistry("https://demo.extrimian.com/sidetree-proxy", "did:quarkid:zksync"),
           didDocumentResolver: new AgentModenaUniversalResolver("https://demo.extrimian.com/sidetree-proxy"),
           secureStorage: new FileSystemAgentSecureStorage({ filepath: "aduana-secure-storage.json" }),
-          vcProtocols: [WACIProtocolUtils.getWaciProtocol()],
+          vcProtocols: [wps.getWaciProtocol()],
           vcStorage: new FileSystemStorage({ filepath: "aduana-vc-storage.json" })
         });
 
@@ -40,7 +41,8 @@ import { WACIProtocolUtils } from './waci-protocol-utils';
 
 
         return agent; // Devuelve el objeto de la clase Agent inicializado
-      }
+      },
+      inject: [WACIProtocolService]
     }
   ],
 

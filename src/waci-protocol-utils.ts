@@ -1,12 +1,17 @@
-import { WACICredentialOfferSucceded, WACIProtocol } from "@extrimian/agent";
+import { Agent, WACICredentialOfferSucceded, WACIProtocol } from "@extrimian/agent";
 import { FileSystemStorage, MemoryStorage } from "./storage";
 
-export class WACIProtocolUtils {
-    static getStorage() {
+export class WACIProtocolService {
+    
+    constructor(private readonly agent: Agent) {
+
+    }
+
+    getStorage() {
         return new FileSystemStorage({ filepath: "waci-protocol.json" });
     }
 
-    static getWaciProtocol() {
+    getWaciProtocol() {
         return new WACIProtocol({
             storage: new FileSystemStorage({ filepath: "waci-protocol.json" }),
             issuer: {
@@ -24,7 +29,7 @@ export class WACIProtocolUtils {
                                     id: 'http://example.edu/credentials/58473',
                                     type: ['VerifiableCredential', 'AlumniCredential'],
                                     issuer:
-                                        'did:quarkid:matic:EiDs1liYifwFEg9l7rxrpR48MH-7Z-M2E32R1vEYThQWsQ',
+                                        this.agent.identity.getOperationalDID().value,
                                     issuanceDate: new Date(),
                                     credentialSubject: {
                                         id: 'did:quarkid:matic:EiCG4tEWdX08DuGKM6rX-fUfHxmJ_N6SY8XqTI8QHfBgtQ',

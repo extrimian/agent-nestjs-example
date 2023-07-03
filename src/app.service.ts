@@ -1,19 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Agent, AgentModenaUniversalRegistry, AgentModenaUniversalResolver, CredentialFlow, WACICredentialOfferSucceded, WACIProtocol } from "@extrimian/agent"
 import { FileSystemAgentSecureStorage, FileSystemStorage, MemoryStorage } from './storage';
-import { WACIProtocolUtils } from './waci-protocol-utils';
+import { WACIProtocolService } from './waci-protocol-utils';
 import { decode } from 'base-64';
 
 @Injectable()
 export class AgentService {
 
-  constructor(private readonly agent: Agent) {
+  constructor(private readonly agent: Agent, private readonly wps: WACIProtocolService) {
     agent.vc.credentialIssued.on((args) => {
       console.log(args.vc);
     });
 
     agent.vc.ackCompleted.on(async (args) => {
-      const data = await WACIProtocolUtils.getStorage().get((<any>args.status).thid);
+      const data = await wps.getStorage().get((<any>args.status).thid);
 
 
       const thId = data[0].pthid;
