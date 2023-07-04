@@ -9,4 +9,9 @@ export class AppController {
   async getInvitationMessage(): Promise<{ invitationId: string, invitationContent: string }> {
     return this.appService.getInvitationMessage();
   }
+
+  @Get("/verification-message")
+  async getVerificationMessage(): Promise<{ invitationId: string, invitationContent: string }> {
+    return this.appService.getVerificationMessage();
+  }
 }

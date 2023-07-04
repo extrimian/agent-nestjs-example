@@ -1,10 +1,17 @@
 import { Agent, WACICredentialOfferSucceded, WACIProtocol } from "@extrimian/agent";
+import { Injectable } from "@nestjs/common";
 import { FileSystemStorage, MemoryStorage } from "./storage";
 
+@Injectable()
 export class WACIProtocolService {
-    
-    constructor(private readonly agent: Agent) {
+    agent: Agent;
 
+    constructor() {
+
+    }
+
+    setCurrentAgent(agent: Agent) {
+        this.agent = agent;
     }
 
     getStorage() {
@@ -28,11 +35,10 @@ export class WACIProtocolService {
                                     ],
                                     id: 'http://example.edu/credentials/58473',
                                     type: ['VerifiableCredential', 'AlumniCredential'],
-                                    issuer:
-                                        this.agent.identity.getOperationalDID().value,
+                                    issuer: this.agent.identity.getOperationalDID().value,
                                     issuanceDate: new Date(),
                                     credentialSubject: {
-                                        id: 'did:quarkid:matic:EiCG4tEWdX08DuGKM6rX-fUfHxmJ_N6SY8XqTI8QHfBgtQ',
+                                        id: holderId,
                                         givenName: 'Jhon',
                                         familyName: 'Does',
                                     },
