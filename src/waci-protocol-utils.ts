@@ -15,12 +15,12 @@ export class WACIProtocolService {
     }
 
     getStorage() {
-        return new FileSystemStorage({ filepath: "waci-protocol.json" });
+        return new FileSystemStorage({ filepath: "waci-protocol-ws.json" });
     }
 
     getWaciProtocol() {
         return new WACIProtocol({
-            storage: new FileSystemStorage({ filepath: "waci-protocol.json" }),
+            storage: new FileSystemStorage({ filepath: "waci-protocol-ws.json" }),
             issuer: {
 
                 issueCredentials: async (waciInvitationId: string, holderId: string) => {
